@@ -1,4 +1,4 @@
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, Platform } from "react-native";
 
 
 function Title({children}) {
@@ -14,8 +14,10 @@ export default Title;
         fontSize: 24,
         color: 'white',
         textAlign: 'center',
-        borderWidth: 2,
+        borderWidth: Platform.OS === 'android' ? 2 : 0,
         borderColor: 'white',
         padding: 8,
+        maxWidth: '80%',
+        width: 300
     }
  })

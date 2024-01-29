@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen'; // Import SplashScreen
 
 import StartGameScreen from './screens/StartGame';
 import GameScreen from './screens/GameScreen';
 import Colors from './constants/colors';
 import GameOverScreen from './screens/GameOverScreen';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
@@ -20,17 +22,18 @@ export default function App() {
   });
 
   useEffect(() => {
-    const hideSplash = async () => {
-      await SplashScreen.preventAutoHideAsync(); // Prevent auto hiding of splash screen
-    };
-
-    if (fontsLoaded) {
-      hideSplash();
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync(); // Keep the splash screen visible while loading fonts
+      if (fontsLoaded) {
+        await SplashScreen.hideAsync(); // Hide the splash screen when fonts are loaded
+      }
     }
+
+    prepare();
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return null; // Return null instead of <AppLoading />
+    return null;
   }
 
   function pickedNumberHandler(pickedNumber) {
